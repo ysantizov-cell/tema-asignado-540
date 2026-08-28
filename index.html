@@ -1,0 +1,609 @@
+<title>Mapa Mental — Definiciones NIA 540</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+ 
+<style>
+  :root{
+    --bg:#0b1420;
+    --bg-vign:#0f1a2b;
+    --rule:#25344a;
+    --rule-soft:#1a2740;
+    --ink-cream:#f2ecd9;
+    --ink-dim:#93a5c0;
+    --ink-faint:#5c6f8c;
+ 
+    --card-bg:#f7f1e4;
+    --card-bg-alt:#efe6d3;
+    --card-ink:#231d13;
+    --card-ink-soft:#5c5340;
+    --card-border:#e2d6b8;
+    --footer-bg:#e9dfc7;
+    --footer-ink:#7a6d4e;
+ 
+    --accent:#3fa17d;
+    --warn:#b3612f;
+    --req:#5b6b82;
+ 
+    --font-display:'Playfair Display', Georgia, 'Times New Roman', serif;
+    --font-body:'Source Serif 4', Georgia, serif;
+    --font-mono:'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+  }
+ 
+  *{ box-sizing:border-box; }
+ 
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse 900px 500px at 50% -8%, var(--bg-vign), transparent 60%),
+      var(--bg);
+    color:var(--ink-cream);
+    font-family:var(--font-body);
+    min-height:100vh;
+    padding:48px 24px 40px;
+    display:flex;
+    justify-content:center;
+  }
+ 
+  .stage{
+    width:100%;
+    max-width:1180px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+ 
+  /* ---------- Header ---------- */
+  header{
+    text-align:center;
+    max-width:760px;
+  }
+  .kicker{
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    margin:0 0 10px;
+  }
+  h1{
+    font-family:var(--font-display);
+    font-weight:800;
+    font-size:clamp(28px,4vw,40px);
+    letter-spacing:.01em;
+    margin:0 0 12px;
+    text-wrap:balance;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+  }
+  h1 .compass{ font-size:.85em; filter:drop-shadow(0 0 10px rgba(63,161,125,.35)); }
+  .subtitle{
+    font-family:var(--font-mono);
+    font-size:13px;
+    color:var(--ink-dim);
+    letter-spacing:.02em;
+    margin:0;
+  }
+  .subtitle .accent{ color:var(--accent); }
+  .subtitle .sep{ color:var(--ink-faint); margin:0 8px; }
+ 
+  .rule{
+    width:min(560px,80%);
+    height:1px;
+    background:linear-gradient(90deg, transparent, var(--rule) 20%, var(--rule) 80%, transparent);
+    margin:26px 0 30px;
+  }
+ 
+  /* ---------- Paso badge ---------- */
+  .paso-badge{
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    letter-spacing:.12em;
+    color:var(--ink-dim);
+    border:1px solid var(--rule);
+    background:rgba(255,255,255,.02);
+    border-radius:999px;
+    padding:7px 20px;
+    margin-bottom:34px;
+  }
+  .paso-badge b{ color:var(--ink-cream); font-weight:600; }
+ 
+  /* ---------- Hexagon row ---------- */
+  .hex-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:16px;
+    width:100%;
+    min-height:150px;
+    margin-bottom:34px;
+    flex-wrap:nowrap;
+    overflow:visible;
+  }
+  .hex-wrap{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    transition:width .45s cubic-bezier(.22,.61,.36,1), opacity .4s ease, transform .45s cubic-bezier(.22,.61,.36,1), margin .45s ease;
+    overflow:hidden;
+    flex-shrink:0;
+  }
+  .hex{
+    clip-path:polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    cursor:pointer;
+    transition:width .45s cubic-bezier(.22,.61,.36,1), height .45s cubic-bezier(.22,.61,.36,1), opacity .4s ease, box-shadow .3s ease, transform .2s ease;
+    font-family:var(--font-mono);
+    font-weight:600;
+    color:#fff;
+    padding:0 8px;
+    line-height:1.15;
+  }
+  .hex:hover{ filter:brightness(1.12); }
+  .hex:focus-visible{ outline:2px solid var(--ink-cream); outline-offset:4px; }
+  .hex-num{
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--ink-faint);
+    transition:opacity .35s ease, color .35s ease;
+  }
+  .hex-wrap.is-active .hex-num{ color:var(--accent); font-weight:600; }
+ 
+  /* ---------- Content card ---------- */
+  .card{
+    width:100%;
+    max-width:900px;
+    background:var(--card-bg);
+    border:1px solid var(--card-border);
+    border-radius:16px;
+    box-shadow:0 24px 60px -20px rgba(0,0,0,.55), 0 2px 0 rgba(255,255,255,.03) inset;
+    overflow:hidden;
+  }
+  .card-scroll{
+    max-height:min(58vh,460px);
+    overflow-y:auto;
+    padding:30px 36px 24px;
+    scrollbar-width:thin;
+    scrollbar-color:#c9bb92 transparent;
+  }
+  .card-scroll::-webkit-scrollbar{ width:9px; }
+  .card-scroll::-webkit-scrollbar-thumb{ background:#c9bb92; border-radius:6px; }
+  .card-scroll::-webkit-scrollbar-track{ background:transparent; }
+ 
+  .card-ref{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    margin-bottom:14px;
+  }
+  .card-ref .sq{
+    width:13px; height:13px; border-radius:3px; flex-shrink:0;
+  }
+  .card-ref span{
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:.06em;
+    color:var(--card-ink-soft);
+  }
+ 
+  .card h2{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:22px;
+    color:var(--card-ink);
+    margin:0 0 14px;
+    text-wrap:balance;
+  }
+ 
+  .card p.intro{
+    font-family:var(--font-body);
+    font-size:16px;
+    line-height:1.62;
+    color:var(--card-ink);
+    margin:0 0 20px;
+    padding-left:16px;
+    border-left:3px solid var(--card-border);
+  }
+  .card p.intro em{
+    font-style:italic;
+    color:var(--card-ink-soft);
+    display:block;
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:.06em;
+    margin-top:8px;
+    text-transform:uppercase;
+  }
+ 
+  .section-label{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--card-ink-soft);
+    margin:0 0 10px;
+  }
+ 
+  .bullets{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:6px;
+  }
+  .bullet{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    background:var(--card-bg-alt);
+    border:1px solid var(--card-border);
+    border-radius:10px;
+    padding:11px 14px;
+  }
+  .bullet .icon{
+    flex-shrink:0;
+    width:22px; height:22px;
+    border-radius:6px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    color:#fff;
+    margin-top:1px;
+  }
+  .bullet .txt{
+    font-family:var(--font-body);
+    font-size:14.5px;
+    line-height:1.55;
+    color:var(--card-ink);
+  }
+  .bullet .txt b{ font-weight:600; }
+ 
+  .card-footer{
+    margin-top:20px;
+    display:inline-block;
+    font-family:var(--font-mono);
+    font-size:11.5px;
+    letter-spacing:.08em;
+    color:var(--footer-ink);
+    background:var(--footer-bg);
+    border:1px solid var(--card-border);
+    border-radius:999px;
+    padding:6px 14px;
+  }
+ 
+  /* ---------- Pagination ---------- */
+  .pager{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:18px;
+    margin-top:30px;
+  }
+  .arrow-btn{
+    width:38px; height:38px;
+    border-radius:50%;
+    border:1px solid var(--rule);
+    background:rgba(255,255,255,.02);
+    color:var(--ink-dim);
+    font-size:16px;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    transition:background .2s ease, color .2s ease, border-color .2s ease, transform .15s ease;
+  }
+  .arrow-btn:hover{ background:rgba(255,255,255,.06); color:var(--ink-cream); border-color:var(--ink-faint); }
+  .arrow-btn:active{ transform:scale(.94); }
+  .arrow-btn:focus-visible{ outline:2px solid var(--ink-cream); outline-offset:2px; }
+ 
+  .dots{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .dot{
+    width:8px; height:8px;
+    border-radius:999px;
+    background:var(--rule);
+    border:none;
+    cursor:pointer;
+    padding:0;
+    transition:width .35s ease, background .3s ease;
+  }
+  .dot:hover{ background:var(--ink-faint); }
+  .dot.active{
+    width:26px;
+    background:var(--accent);
+  }
+  .dot:focus-visible{ outline:2px solid var(--ink-cream); outline-offset:3px; }
+ 
+  .hint{
+    margin-top:18px;
+    font-family:var(--font-mono);
+    font-size:11.5px;
+    color:var(--ink-faint);
+    letter-spacing:.03em;
+    text-align:center;
+  }
+  .hint kbd{
+    font-family:var(--font-mono);
+    background:rgba(255,255,255,.05);
+    border:1px solid var(--rule);
+    border-radius:4px;
+    padding:1px 6px;
+    color:var(--ink-dim);
+  }
+ 
+  @media (max-width:600px){
+    .card-scroll{ padding:22px 20px 18px; }
+    .hex-row{ gap:10px; }
+  }
+ 
+  @media (prefers-reduced-motion: reduce){
+    *{ transition-duration:.01ms !important; }
+  }
+</style>
+ 
+<div class="stage">
+  <header>
+    <p class="kicker">Norma Internacional de Auditoría · Apartado 7</p>
+    <h1><span class="compass">🧭</span> Mapa Mental — Definiciones</h1>
+    <p class="subtitle">NIA 540 · Auditoría de Estimaciones Contables <span class="sep">·</span><span class="accent">agosto 2026</span><span class="sep">·</span>Navega con las flechas</p>
+  </header>
+ 
+  <div class="rule"></div>
+ 
+  <div class="paso-badge">Paso <b id="pasoActual">1</b> de <b id="pasoTotal">6</b></div>
+ 
+  <div class="hex-row" id="hexRow"></div>
+ 
+  <div class="card">
+    <div class="card-scroll" id="cardScroll">
+      <div class="card-ref">
+        <span class="sq" id="refSq"></span>
+        <span id="refLabel"></span>
+      </div>
+      <h2 id="cardTitle"></h2>
+      <p class="intro" id="cardIntro"></p>
+      <p class="section-label">En contexto</p>
+      <div class="bullets" id="cardBullets"></div>
+      <span class="card-footer" id="cardFooter"></span>
+    </div>
+  </div>
+ 
+  <div class="pager">
+    <button class="arrow-btn" id="prevBtn" aria-label="Paso anterior">‹</button>
+    <div class="dots" id="dots"></div>
+    <button class="arrow-btn" id="nextBtn" aria-label="Paso siguiente">›</button>
+  </div>
+ 
+  <p class="hint">Usa las teclas <kbd>←</kbd> <kbd>→</kbd> para navegar, o haz clic en los hexágonos / puntos</p>
+</div>
+ 
+<script>
+(function(){
+ 
+  var STEPS = [
+    {
+      label:"ESTIMACIÓN CONTABLE",
+      color:"#3fa17d",
+      ref:"§7(a)",
+      title:"1. Estimación Contable",
+      intro:"Una aproximación a un importe en ausencia de medios precisos de medida.",
+      bullets:[
+        {t:"ex", i:"♦", x:"Cuando implica medir a valor razonable, se usa el término <b>“estimación contable del valor razonable”</b>."},
+        {t:"key", i:"✓", x:"Surge porque una partida no puede medirse con exactitud, e implica juicios de la dirección sobre hipótesis inciertas."}
+      ],
+      footer:"Apartado 7(a) · Ref. A1–A8"
+    },
+    {
+      label:"ESTIMACIÓN PUNTUAL O RANGO DEL AUDITOR",
+      color:"#4a6fa5",
+      ref:"§7(b)",
+      title:"2. Estimación Puntual o Rango del Auditor",
+      intro:"Cantidad, o rango de cantidades respectivamente, derivadas de la evidencia de auditoría obtenida para utilizar en la evaluación de una estimación puntual realizada por la dirección.",
+      bullets:[
+        {t:"ex", i:"♦", x:"Si el auditor usa hipótesis propias, evaluará las variables relevantes frente a las de la dirección."},
+        {t:"key", i:"✓", x:"El rango se reduce hasta contener solo desenlaces razonables; ni tan amplio que pierda utilidad, ni sesgado."}
+      ],
+      footer:"Apartado 7(b) · Ref. A87–A95"
+    },
+    {
+      label:"INCERTIDUMBRE EN LA ESTIMACIÓN",
+      color:"#a34a56",
+      ref:"§7(c)",
+      title:"3. Incertidumbre en la Estimación",
+      intro:"La susceptibilidad de una estimación contable y de la información revelada relacionada a una falta inherente de precisión en su medida.",
+      bullets:[
+        {t:"warn", i:"⚠", x:"Depende de la dependencia de juicios, la sensibilidad a hipótesis y la disponibilidad de datos observables."},
+        {t:"key", i:"✓", x:"Un grado elevado puede dar lugar a un <b>riesgo significativo</b>, o incluso impedir el reconocimiento de la partida."}
+      ],
+      footer:"Apartado 7(c) · Ref. A2–A6, A45–A51"
+    },
+    {
+      label:"SESGO DE LA DIRECCIÓN",
+      color:"#9c3f4f",
+      ref:"§7(d)",
+      title:"4. Sesgo de la Dirección",
+      intro:"Falta de neutralidad de la dirección en la preparación de la información.",
+      bullets:[
+        {t:"warn", i:"⚠", x:"Puede ser <b>intencionado</b> o no, y suele ser difícil de detectar en una sola estimación."},
+        {t:"key", i:"✓", x:"No es en sí mismo una incorrección; si busca inducir a error, es de naturaleza <b>fraudulenta</b>."}
+      ],
+      footer:"Apartado 7(d) · Ref. A9–A10, A124–A125"
+    },
+    {
+      label:"ESTIMACIÓN PUNTUAL DE LA DIRECCIÓN",
+      color:"#b08a35",
+      ref:"§7(e)",
+      title:"5. Estimación Puntual de la Dirección",
+      intro:"Cantidad determinada por la dirección como estimación contable para su reconocimiento o revelación en los estados financieros.",
+      bullets:[
+        {t:"ex", i:"♦", x:"Resulta del método, los datos y las hipótesis que la dirección elige aplicar."},
+        {t:"key", i:"✓", x:"Si difiere de la estimación del auditor, avalada por evidencia suficiente, esa diferencia es una <b>incorrección</b>."}
+      ],
+      footer:"Apartado 7(e) · Ref. A13–A15, A22–A30"
+    },
+    {
+      label:"DESENLACE DE UNA ESTIMACIÓN CONTABLE",
+      color:"#6a4f9c",
+      ref:"§7(f)",
+      title:"6. Desenlace de una Estimación Contable",
+      intro:"Importe resultante de la resolución final de las transacciones, hechos o condiciones en que se basa la estimación contable.",
+      bullets:[
+        {t:"key", i:"✓", x:"Una diferencia con lo reconocido <b>no es necesariamente</b> una incorrección, sobre todo en valor razonable."},
+        {t:"warn", i:"⚠", x:"Sí lo es cuando la diferencia proviene de información ya disponible para la dirección al cierre del periodo anterior."}
+      ],
+      footer:"Apartado 7(f) · Ref. párr. 4, 9, A39–A44"
+    }
+  ];
+ 
+  var current = 0;
+  var total = STEPS.length;
+ 
+  var hexRow = document.getElementById('hexRow');
+  var dotsEl = document.getElementById('dots');
+  var pasoActual = document.getElementById('pasoActual');
+  var pasoTotal = document.getElementById('pasoTotal');
+  var cardScroll = document.getElementById('cardScroll');
+  var refSq = document.getElementById('refSq');
+  var refLabel = document.getElementById('refLabel');
+  var cardTitle = document.getElementById('cardTitle');
+  var cardIntro = document.getElementById('cardIntro');
+  var cardBullets = document.getElementById('cardBullets');
+  var cardFooter = document.getElementById('cardFooter');
+ 
+  pasoTotal.textContent = total;
+ 
+  var iconColors = {
+    req:'var(--req)',
+    ex:null,   /* uses step color */
+    key:'var(--accent)',
+    warn:'var(--warn)'
+  };
+ 
+  function buildHexRow(){
+    hexRow.innerHTML = '';
+    STEPS.forEach(function(step, idx){
+      var wrap = document.createElement('div');
+      wrap.className = 'hex-wrap';
+      wrap.dataset.idx = idx;
+ 
+      var num = document.createElement('span');
+      num.className = 'hex-num';
+      num.textContent = String(idx+1).padStart(2,'0');
+ 
+      var hex = document.createElement('div');
+      hex.className = 'hex';
+      hex.setAttribute('role','button');
+      hex.setAttribute('tabindex','0');
+      hex.setAttribute('aria-label', 'Ir a paso ' + (idx+1) + ': ' + step.label);
+      hex.style.background = step.color;
+      hex.textContent = step.label;
+ 
+      hex.addEventListener('click', function(){ goTo(idx); });
+      hex.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); goTo(idx); }
+      });
+ 
+      wrap.appendChild(hex);
+      wrap.appendChild(num);
+      hexRow.appendChild(wrap);
+    });
+  }
+ 
+  function buildDots(){
+    dotsEl.innerHTML = '';
+    STEPS.forEach(function(step, idx){
+      var b = document.createElement('button');
+      b.className = 'dot';
+      b.setAttribute('aria-label', 'Ir a paso ' + (idx+1));
+      b.addEventListener('click', function(){ goTo(idx); });
+      dotsEl.appendChild(b);
+    });
+  }
+ 
+  function sizeForDistance(d){
+    if(d === 0) return {w:210, h:118, fs:13.5, op:1};
+    if(d === 1) return {w:132, h:76, fs:11, op:.72};
+    if(d === 2) return {w:88, h:52, fs:9.5, op:.4};
+    return {w:0, h:0, fs:9, op:0};
+  }
+ 
+  function render(){
+    var wraps = hexRow.querySelectorAll('.hex-wrap');
+    wraps.forEach(function(wrap, idx){
+      var d = Math.abs(idx - current);
+      var s = sizeForDistance(d);
+      var hex = wrap.querySelector('.hex');
+      hex.style.width = s.w + 'px';
+      hex.style.height = s.h + 'px';
+      hex.style.fontSize = s.fs + 'px';
+      hex.style.opacity = s.op;
+      wrap.style.width = (s.w) + 'px';
+      wrap.style.opacity = d > 2 ? 0 : 1;
+      wrap.classList.toggle('is-active', idx === current);
+      var numEl = wrap.querySelector('.hex-num');
+      numEl.style.opacity = d > 1 ? 0 : 1;
+    });
+ 
+    var dots = dotsEl.querySelectorAll('.dot');
+    dots.forEach(function(dot, idx){
+      dot.classList.toggle('active', idx === current);
+    });
+ 
+    pasoActual.textContent = current + 1;
+ 
+    var step = STEPS[current];
+    refSq.style.background = step.color;
+    refLabel.textContent = step.ref;
+    cardTitle.textContent = step.title;
+    cardIntro.textContent = step.intro;
+    cardFooter.textContent = step.footer;
+ 
+    cardBullets.innerHTML = '';
+    step.bullets.forEach(function(b){
+      var row = document.createElement('div');
+      row.className = 'bullet';
+ 
+      var icon = document.createElement('div');
+      icon.className = 'icon';
+      icon.textContent = b.i;
+      icon.style.background = (b.t === 'ex') ? step.color : iconColors[b.t];
+ 
+      var txt = document.createElement('div');
+      txt.className = 'txt';
+      txt.innerHTML = b.x;
+ 
+      row.appendChild(icon);
+      row.appendChild(txt);
+      cardBullets.appendChild(row);
+    });
+ 
+    cardScroll.scrollTop = 0;
+  }
+ 
+  function goTo(idx){
+    current = Math.max(0, Math.min(total-1, idx));
+    render();
+  }
+  function next(){ goTo(current+1 >= total ? 0 : current+1); }
+  function prev(){ goTo(current-1 < 0 ? total-1 : current-1); }
+ 
+  document.getElementById('nextBtn').addEventListener('click', next);
+  document.getElementById('prevBtn').addEventListener('click', prev);
+ 
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowRight'){ next(); }
+    else if(e.key === 'ArrowLeft'){ prev(); }
+  });
+ 
+  buildHexRow();
+  buildDots();
+  render();
+ 
+})();
+</script>
